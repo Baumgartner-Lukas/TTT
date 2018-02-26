@@ -1,8 +1,11 @@
 
 
 import controller.GameController;
+import controller.SimpleAI;
 import model.GameBoard;
 import view.GameFieldView;
+
+import java.io.IOException;
 
 /**
  * TicTacToe - Game
@@ -22,10 +25,11 @@ import view.GameFieldView;
  */
 public class TicTacToe {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         GameBoard model = new GameBoard();
         GameFieldView view = new GameFieldView();
-        GameController controller = new GameController(model, view);
+        SimpleAI sai = new SimpleAI(model);
+        GameController controller = new GameController(model, view, sai);
 
         controller.play();
     }
