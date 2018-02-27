@@ -17,6 +17,11 @@ public class SimpleAI {
         counter++;
     }
 
+    /**
+     * Adds stones randomly on the field. Easiest difficulty.
+     *
+     * @param model
+     */
     private void addRandomStone(GameBoard model) {
         int row = getRandomNumber();
         int col = getRandomNumber();
@@ -27,6 +32,11 @@ public class SimpleAI {
         model.setStone(row, col, Stone.O);
     }
 
+    /**
+     * Adds stones in a way to the board, that should always lead to a draw
+     *
+     * @param model
+     */
     private void alwaysDraw(GameBoard model) {
         //if there is no stone set in the middle, set a stone in the middle
         if (counter == 1) {
@@ -41,8 +51,8 @@ public class SimpleAI {
                 if (!checkRows(model)) {
                     if (!checkCols(model)) {
                         if (!checkCorners(model)) {
-                            if(!checkStraights(model))
-                            addRandomStone(model);
+                            if (!checkStraights(model))
+                                addRandomStone(model);
                         }
                     }
                 }
@@ -51,9 +61,10 @@ public class SimpleAI {
     }
 
     private boolean checkStraights(GameBoard model) {
-        int r = getRandomZeroOrOne(); int c = getRandomZeroOrOne();
+        int r = getRandomZeroOrOne();
+        int c = getRandomZeroOrOne();
         while (model.getStone(r, c) != Stone.NONE) {
-            r= getRandomZeroOrOne();
+            r = getRandomZeroOrOne();
             c = getRandomZeroOrOne();
         }
         model.setStone(r, c, Stone.O);
@@ -66,7 +77,7 @@ public class SimpleAI {
             for (int c = 0; c < 2; c++) {
                 if (model.getStone(r * 2, c * 2) == Stone.X) {
                     cornerCount++;
-                    if (cornerCount < 2 && model.getStone(r*2,c*2) == Stone.NONE) {
+                    if (cornerCount < 2 && model.getStone(r * 2, c * 2) == Stone.NONE) {
                         model.setStone(r * 2, c * 2, Stone.O);
                         return true;
                     }
@@ -77,6 +88,7 @@ public class SimpleAI {
     }
 
     private boolean checkDiagonal(GameBoard model) {
+        if (model.getStone(1, 1) != Stone.X) return false;
         if (model.getStone(1, 1) == Stone.X &&
                 model.getStone(0, 0) == Stone.X &&
                 model.getStone(2, 2) != Stone.O) {
@@ -105,16 +117,14 @@ public class SimpleAI {
         for (int r = 0; r < 3; r++) {
             int stoneCount = 0;
             for (int c = 0; c < 3; c++) {
-                if ((model.getStone(r, c) == Stone.O)) --stoneCount;
                 if (model.getStone(r, c) == Stone.X) {
                     stoneCount++;
-                    if (stoneCount == 2 && c == 2) {
-                        counterMoveRow(model, r);
-                        return true;
-                    }
                 }
             }
-
+            if (stoneCount == 2) {
+                counterMoveRow(model, r);
+                return true;
+            }
         }
         return false;
     }
@@ -123,14 +133,13 @@ public class SimpleAI {
         for (int c = 0; c < 3; c++) {
             int stoneCount = 0;
             for (int r = 0; r < 3; r++) {
-                if ((model.getStone(r, c) == Stone.O)) --stoneCount;
                 if (model.getStone(r, c) == Stone.X) {
                     stoneCount++;
-                    if (stoneCount == 2) {
-                        counterMoveCol(model, c);
-                        return true;
-                    }
                 }
+            }
+            if (stoneCount == 2) {
+                counterMoveCol(model, c);
+                return true;
             }
         }
         return false;

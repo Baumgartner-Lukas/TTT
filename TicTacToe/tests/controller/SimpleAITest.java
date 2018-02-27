@@ -8,28 +8,68 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 public class SimpleAITest {
-    GameBoard model;
-    SimpleAI sai;
+    private GameBoard model;
+    private SimpleAI sai;
+
     @Before
     public void setUp() throws Exception {
         model = new GameBoard();
         sai = new SimpleAI();
 
+        sai.counter = 2;
+    }
+
+    private void setUpForRowCheck(){
         model.setStone(0,0, Stone.X);
         model.setStone(0,1, Stone.X);
         model.setStone(2,0, Stone.X);
         model.setStone(2,2, Stone.X);
 
-        model.setStone(0,2,Stone.O);
         model.setStone(1,1,Stone.O);
         model.setStone(2,1,Stone.O);
     }
 
+    private void setUpForColCheck(){
+        model.setStone(2,2, Stone.X);
+        model.setStone(1,2, Stone.X);
+
+        model.setStone(1,1,Stone.O);
+
+    }
+
+    private void setUpForDiagonal() {
+        model.setStone(1,1,Stone.X);
+        model.setStone(0,2,Stone.X);
+
+        model.setStone(2,2,Stone.O);
+    }
+
     @Test
     public void stoneIsSetCorrectlyRowCheck() {
-        sai.counter = 2;
+        setUpForRowCheck();
+
         sai.updateGameBoard(model);
 
-        assertEquals(Stone.O, model.getStone(1,0));
+        assertEquals(Stone.O, model.getStone(0,2));
     }
+
+    @Test
+    public void stoneIsSetCorrectlyColCheck() {
+        setUpForColCheck();
+
+        sai.updateGameBoard(model);
+
+        assertEquals(Stone.O, model.getStone(0,2));
+    }
+
+    @Test
+    public void stoneIsSetCorrectlyDiagonalCheck() {
+        setUpForDiagonal();
+
+        sai.updateGameBoard(model);
+
+        assertEquals(Stone.O, model.getStone(2,0));
+    }
+
+
 }
