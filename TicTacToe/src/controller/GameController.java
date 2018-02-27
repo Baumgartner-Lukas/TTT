@@ -154,4 +154,8 @@ public class GameController {
 
         return input;
     }
+
+    protected int getCounter(){
+        return counter;
+    }
 }

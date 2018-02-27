@@ -28,7 +28,7 @@ public class TicTacToe {
     public static void main(String[] args) throws IOException {
         GameBoard model = new GameBoard();
         GameFieldView view = new GameFieldView();
-        SimpleAI sai = new SimpleAI(model);
+        SimpleAI sai = new SimpleAI();
         GameController controller = new GameController(model, view, sai);
 
         controller.play();
