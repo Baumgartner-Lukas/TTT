@@ -20,7 +20,7 @@ public class SimpleAI {
     /**
      * Adds stones randomly on the field. Easiest difficulty.
      *
-     * @param model
+     * @param model model of the current game board
      */
     private void addRandomStone(GameBoard model) {
         int row = getRandomNumber();
@@ -35,7 +35,7 @@ public class SimpleAI {
     /**
      * Adds stones in a way to the board, that should always lead to a draw
      *
-     * @param model
+     * @param model model of the current game board
      */
     private void alwaysDraw(GameBoard model) {
         //if there is no stone set in the middle, set a stone in the middle
@@ -51,8 +51,7 @@ public class SimpleAI {
                 if (!checkRows(model)) {
                     if (!checkCols(model)) {
                         if (!checkCorners(model)) {
-                            if (!checkStraights(model))
-                                addRandomStone(model);
+                            checkStraights(model);
                         }
                     }
                 }
@@ -60,15 +59,15 @@ public class SimpleAI {
         }
     }
 
-    private boolean checkStraights(GameBoard model) {
-        int r = getRandomZeroOrOne();
-        int c = getRandomZeroOrOne();
-        while (model.getStone(r, c) != Stone.NONE) {
-            r = getRandomZeroOrOne();
-            c = getRandomZeroOrOne();
+    private void checkStraights(GameBoard model) {
+        int r = getRandomNumber();
+        int c = getRandomNumber();
+        if(model.getStone(r, c) == Stone.NONE && (r + c > 0 && r + c < 4)) {
+            model.setStone(r, c, Stone.O);
+        }else{
+            checkStraights(model);
         }
-        model.setStone(r, c, Stone.O);
-        return true;
+
     }
 
     private boolean checkCorners(GameBoard model) {
@@ -119,6 +118,8 @@ public class SimpleAI {
             for (int c = 0; c < 3; c++) {
                 if (model.getStone(r, c) == Stone.X) {
                     stoneCount++;
+                }else if(model.getStone(r,c) == Stone.O){
+                    stoneCount--;
                 }
             }
             if (stoneCount == 2) {
@@ -135,7 +136,7 @@ public class SimpleAI {
             for (int r = 0; r < 3; r++) {
                 if (model.getStone(r, c) == Stone.X) {
                     stoneCount++;
-                }
+                }else if(model.getStone(r,c) == Stone.O) stoneCount--;
             }
             if (stoneCount == 2) {
                 counterMoveCol(model, c);
@@ -165,7 +166,4 @@ public class SimpleAI {
         return current().nextInt(0, 2) * 2;
     }
 
-    private int getRandomZeroOrOne() {
-        return current().nextInt(0, 2);
-    }
 }
